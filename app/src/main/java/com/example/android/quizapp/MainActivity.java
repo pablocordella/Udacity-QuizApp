@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     float SCALE_DP;
 
-    HashMap<Integer, Question> questionsHashMap = new HashMap<Integer, Question>();
+    HashMap<Integer, IQuestion> questionsHashMap = new HashMap<Integer, IQuestion>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,9 +176,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void onSubmit(View view) {
         Log.i("yay",  questionsHashMap.size()+"");
-        for(Map.Entry<Integer, Question> entry : questionsHashMap.entrySet()){
+        for(Map.Entry<Integer, IQuestion> entry : questionsHashMap.entrySet()){
             int key = entry.getKey();
-            Question question = entry.getValue();
+            IQuestion question = entry.getValue();
 
            // Log.i("key", key+"");
             //Log.i("question", question.toString());
@@ -187,116 +187,5 @@ public class MainActivity extends AppCompatActivity {
             Log.i("debug", rspta);
         }
         Log.i("asda", "================================");
-    }
-}
-
-interface Question {
-    public boolean IsCorrect(LinearLayout parentView);
-}
-
-class RadioButtonQuestion implements Question {
-
-    private int correctIndex;
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String[] getOptions() {
-        return options;
-    }
-
-    private String[] options;
-    private String title;
-
-    public RadioButtonQuestion(String title, int correctIndex, String[] options) {
-        this.title = title;
-        this.correctIndex = correctIndex;
-        this.options = options;
-    }
-
-    @Override
-    public boolean IsCorrect(LinearLayout parentView) {
-        //Log.i("IsCorrect", "Iscorrect");
-
-        int count = parentView.getChildCount();
-        //Log.i("count", count+"");
-        for( int i=0; i<count; i++) {
-            RadioButton radioButton = (RadioButton)parentView.getChildAt(i);
-            if( radioButton == null ) {
-                continue;
-            }
-
-            //Log.i("asdf", radioButton.isChecked() + ", correctIndex: " + correctIndex);
-            if( radioButton.isChecked() && correctIndex == i ) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-}
-
-class CheckBoxQuestion implements Question {
-    private ArrayList<Integer> correctIndex;
-    private String[] options;
-    private String title;
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String[] getOptions() {
-        return options;
-    }
-
-    public CheckBoxQuestion(String title, ArrayList<Integer> correctIndex, String[] options) {
-        this.correctIndex = correctIndex;
-        this.options = options;
-        this.title = title;
-    }
-
-    @Override
-    public boolean IsCorrect(LinearLayout parentView) {
-        int count = parentView.getChildCount();
-        //Log.i("count", count+"");
-        for( int i=0; i<count; i++) {
-            CheckBox checkBox = (CheckBox)parentView.getChildAt(i);
-            boolean contains = correctIndex.contains(i);
-            //Log.i("asdf", checkBox.isChecked() + ", contains("+i+"): " + contains);
-            if( checkBox.isChecked() && !contains ) {
-                return false;
-            }
-
-            if( !checkBox.isChecked() && contains ) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-}
-
-class EditTextQuestion implements Question {
-    String correctText;
-
-    public String getTitle() {
-        return title;
-    }
-
-    String title;
-
-    public EditTextQuestion(String title, String correctText) {
-        this.correctText = correctText;
-        this.title = title;
-    }
-
-    @Override
-    public boolean IsCorrect(LinearLayout parentView) {
-       // Log.i("tsdaa", "asdad");
-        EditText editText = (EditText)parentView.getChildAt(1);
-        //Log.i("gettext", editText.getText().toString());
-        //Log.i("gettext", correctText);
-        return (editText.getText().toString().trim().equals(correctText));
     }
 }
