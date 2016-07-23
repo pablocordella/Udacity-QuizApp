@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">QuizApp</string>
+    <string name="quiz_title_string">Fruit Quiz</string>
+    <string name="edit_text_hint_string">Input your name</string>
+</resources>
