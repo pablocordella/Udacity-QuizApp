@@ -6,7 +6,7 @@ import android.widget.RadioButton;
 /**
  * Created by Pablo on 23-Jul-16.
  */
-class RadioButtonQuestion extends MultipleQuestion implements IQuestion {
+class RadioButtonQuestion extends MultipleQuestion {
 
     private int correctIndex;
     public RadioButtonQuestion(String title, int correctIndex, String[] options) {

@@ -1,5 +1,17 @@
 <resources>
     <string name="app_name">QuizApp</string>
     <string name="quiz_title_string">Fruit Quiz</string>
-    <string name="edit_text_hint_string">Input your name</string>
+    <string name="submit_text">Submit</string>
+    <string name="question_1_title">Which friut of these is red</string>
+    <string name="question_2_title">Which friut of these is yellow</string>
+    <string name="question_3_title">Which one of these are yellow</string>
+    <string name="question_4_title">Is tomate a fruit or a vegetable?</string>
+    <string name="question_4_answer">fruit</string>
+    <string name="banana_text">Banana</string>
+    <string name="pineapple_text">Pineapple</string>
+    <string name="tomato_text">Tomato</string>
+    <string name="avocado_text">Avocado</string>
+    <string name="strawberry_text">Strawberry</string>
+    <string name="result_text">You have {0} good answer(s)</string>
+
 </resources>

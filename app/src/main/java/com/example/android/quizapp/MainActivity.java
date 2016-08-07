@@ -3,7 +3,6 @@ package com.example.android.quizapp;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -15,9 +14,12 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,37 +28,69 @@ public class MainActivity extends AppCompatActivity {
 
     float SCALE_DP;
 
-    HashMap<Integer, IQuestion> questionsHashMap = new HashMap<Integer, IQuestion>();
+    HashMap<Integer, BaseQuestion> questionsHashMap = new HashMap<Integer, BaseQuestion>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         SCALE_DP = getResources().getDisplayMetrics().density;
 
+        ArrayList<BaseQuestion> metaData = new ArrayList<>();
+        metaData.add( new RadioButtonQuestion(
+                getResources().getString(R.string.question_1_title),
+                2,
+                new String[]{
+                        getResources().getString(R.string.banana_text),
+                        getResources().getString(R.string.avocado_text),
+                        getResources().getString(R.string.tomato_text)
+                }
+        ));
+
+        metaData.add( new RadioButtonQuestion(
+                getResources().getString(R.string.question_2_title),
+                0,
+                new String[]{
+                        getResources().getString(R.string.banana_text),
+                        getResources().getString(R.string.strawberry_text),
+                        getResources().getString(R.string.tomato_text)
+                }
+        ));
+
+
+        metaData.add( new CheckBoxQuestion(
+                getResources().getString(R.string.question_3_title),
+                new ArrayList<Integer>( Arrays.asList(0,1) ),
+                new String[]{
+                        getResources().getString(R.string.banana_text),
+                        getResources().getString(R.string.pineapple_text),
+                        getResources().getString(R.string.tomato_text)
+                }
+        ));
+
+        metaData.add( new EditTextQuestion(
+                getResources().getString(R.string.question_4_title),
+                getResources().getString(R.string.question_4_answer)
+            ));
+
         LinearLayout baseLayout = (LinearLayout) findViewById(R.id.base_layout_id);
+
         int idOffset = 10;
-        int i;
-        for (i=0; i < 3; i++) {
-            RadioButtonQuestion radioButtonQuestion = new RadioButtonQuestion("title: " + i, i, new String[]{"1", "2"});
-            questionsHashMap.put(i+idOffset, radioButtonQuestion);
-            baseLayout.addView(CreateRadioButtonQuestionLayout(i+idOffset, radioButtonQuestion) ,baseLayout.getChildCount()-1);
+        for (int i=0; i < metaData.size(); i++) {
+            baseLayout.addView(LayoutCreator(i+idOffset, metaData.get(i)), baseLayout.getChildCount()-1);
+            questionsHashMap.put(i+idOffset,metaData.get(i) );
         }
+    }
 
-        for (; i < 10; i++) {
-            ArrayList<Integer> list = new ArrayList<Integer>();
-            list.add(0);
-            list.add(1);
-
-            CheckBoxQuestion checkBoxQuestion = new CheckBoxQuestion("hola: " + i, list, new String[]{"1", "a2","3v"});
-            questionsHashMap.put(i+idOffset, checkBoxQuestion);
-            baseLayout.addView(CreateCheckBoxQuestionLayout(i+idOffset, checkBoxQuestion), baseLayout.getChildCount()-1);
+    protected View LayoutCreator(int id, BaseQuestion question) {
+        if( question instanceof RadioButtonQuestion ) {
+            return  CreateRadioButtonQuestionLayout(id, (RadioButtonQuestion)question);
+        } else if(  question instanceof  EditTextQuestion ){
+            return CreateEditTextQuestionLayout(id, (EditTextQuestion)question);
         }
-
-        for( ; i< 12; i++){
-            EditTextQuestion editTextQuestion = new EditTextQuestion("title " +i, "asi");
-            questionsHashMap.put(i+idOffset, editTextQuestion);
-            baseLayout.addView(CreateEditTextQuestionLayout(i+idOffset, editTextQuestion), baseLayout.getChildCount()-1);
+        else {
+            return CreateCheckBoxQuestionLayout(id, (CheckBoxQuestion)question);
         }
     }
 
@@ -64,9 +98,6 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout base = new LinearLayout(this);
         base.setOrientation(LinearLayout.VERTICAL);
 
-
-        //base.setId(id);
-        //Log.i("seteando aid", id+"");
         TextView title = CreateQuizQuestionTitleTextView(radioButtonQuestion.getTitle());
 
         base.addView(title);
@@ -97,9 +128,6 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout base = new LinearLayout(this);
         base.setOrientation(LinearLayout.VERTICAL);
 
-
-       // base.setId(id);
-        //Log.i("seteando aid", id+"");
         TextView title = CreateQuizQuestionTitleTextView(checkBoxQuestion.getTitle());
 
         base.addView(title);
@@ -113,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
             checkBox.setText(checkBoxQuestion.getOptions()[i]);
             layout.addView(checkBox);
         }
+
         base.addView(layout);
 
         View line = new View(this);
@@ -130,31 +159,19 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout base = new LinearLayout(this);
         base.setOrientation(LinearLayout.VERTICAL);
 
-         base.setId(id);
-        //Log.i("seteando aid", id+"");
+        base.setId(id);
         TextView title = CreateQuizQuestionTitleTextView(editTextQuestion.getTitle());
 
         base.addView(title);
 
         EditText editText= new EditText(this);
-        editText.setHint("test");
 
         LinearLayout.LayoutParams layParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT );
         int margin = (int)(25*SCALE_DP);
         layParams.setMargins(0,0,0,margin);
         editText.setLayoutParams( layParams );
 
-
         base.addView(editText);
-
-       /* View line = new View(this);
-        LinearLayout.LayoutParams layParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int)(1*SCALE_DP) );
-        int margin = (int)(25*SCALE_DP);
-        layParams.setMargins(0,margin,0,margin);
-        line.setLayoutParams( layParams );
-        line.setBackgroundColor(Color.GRAY);
-        base.addView(line);*/
-
         return base;
     }
 
@@ -175,17 +192,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onSubmit(View view) {
-        Log.i("yay",  questionsHashMap.size()+"");
-        for(Map.Entry<Integer, IQuestion> entry : questionsHashMap.entrySet()){
+        int goodAnswers = 0;
+        for(Map.Entry<Integer, BaseQuestion> entry : questionsHashMap.entrySet()){
             int key = entry.getKey();
-            IQuestion question = entry.getValue();
-
-           // Log.i("key", key+"");
-            //Log.i("question", question.toString());
+            BaseQuestion question = entry.getValue();
             LinearLayout layout = (LinearLayout) findViewById(key);
-            String rspta = "Tuviste: " + question.IsCorrect( layout ) + " (id:" + key + ")";
-            Log.i("debug", rspta);
+            goodAnswers = question.IsCorrect( layout ) ? goodAnswers +1 : goodAnswers;
         }
-        Log.i("asda", "================================");
+        String result = MessageFormat.format(getResources().getString(R.string.result_text), goodAnswers);
+        Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
     }
 }

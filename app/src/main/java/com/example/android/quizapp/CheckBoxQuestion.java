@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * Created by Pablo on 23-Jul-16.
  */
-class CheckBoxQuestion extends MultipleQuestion implements IQuestion {
+class CheckBoxQuestion extends MultipleQuestion  {
     private ArrayList<Integer> correctIndex;
 
     public CheckBoxQuestion(String title, ArrayList<Integer> correctIndex, String[] options) {

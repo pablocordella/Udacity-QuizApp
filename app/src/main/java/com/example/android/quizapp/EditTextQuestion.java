@@ -6,7 +6,7 @@ import android.widget.LinearLayout;
 /**
  * Created by Pablo on 23-Jul-16.
  */
-class EditTextQuestion extends BaseQuestion implements IQuestion {
+class EditTextQuestion extends BaseQuestion  {
     String correctText;
 
     public EditTextQuestion(String title, String correctText) {

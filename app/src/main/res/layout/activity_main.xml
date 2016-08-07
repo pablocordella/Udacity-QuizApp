@@ -20,18 +20,15 @@
             android:gravity="center"
             android:layout_height="48dp"
             android:textSize="28sp"
+            android:layout_marginBottom="20dp"
             android:text="@string/quiz_title_string" />
-        <!--EditText
-            android:id="@+id/edit_text_id"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/edit_text_hint_string"/-->
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:onClick="onSubmit"
-            android:text="Submit"/>
+            android:text="@string/submit_text"/>
 
     </LinearLayout>
 </ScrollView>
